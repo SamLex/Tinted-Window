@@ -11,7 +11,7 @@ Usage
 When this program is run, a partially translucent window will appear with the default purple colour.
 This window's size can be adjusted to suit. By right clicking on the window, a menu pops-up with 3
 options. About brings up the about page, Options gives you varies options for changing the colour and
-translucence of the window and Quit closes the program. Upon re-opening the window, the previously
+translucence of the window and Exit closes the program. Upon re-opening the window, the previously
 selected colour and translucency are remembered. The window also is always infront of other windows,
 so putting the overlay over a piece of text in your web browser and then clicking to the side of the
 window on to the web browser allows the text to be scrolled with the overlay remaining in place.
