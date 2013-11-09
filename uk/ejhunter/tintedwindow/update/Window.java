@@ -53,7 +53,7 @@ public class Window extends JFrame {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            if (e.isShiftDown()) {
+            if (e.isShiftDown()) { //TODO: only have one key (Ctr on win/linux and Cmd on OS X)?
                 switch (mouseSector) {
                     case NW:
                         setSize(getWidth(), getHeight() - (e.getYOnScreen() - dragY));
@@ -131,7 +131,7 @@ public class Window extends JFrame {
             else
                 mouseSector = Sector.NONE;
 
-            if (e.isShiftDown()) {
+            if (e.isShiftDown()) { //TODO: move to keyboard handler?
                 switch (mouseSector) {
                     case NW:
                         setCursor(Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR));
