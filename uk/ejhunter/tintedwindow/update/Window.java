@@ -49,15 +49,13 @@ public class Window extends JFrame {
 
         @Override
         public void mouseDragged(MouseEvent e) {
-            if (e.getButton() == MouseEvent.BUTTON1) {
-                if (e.isAltDown()) {
-                    setSize(getWidth() + (e.getXOnScreen() - dragX), getHeight());
+            if (e.isShiftDown()) {
+                setSize(getWidth() + (e.getXOnScreen() - dragX), getHeight());
 
-                    this.dragX = e.getXOnScreen();
-                    this.dragY = e.getXOnScreen();
-                } else if (e.isControlDown()) {
-                    setLocation(e.getXOnScreen() - this.startX, e.getYOnScreen() - this.startY);
-                }
+                this.dragX = e.getXOnScreen();
+                this.dragY = e.getXOnScreen();
+            } else if (e.isControlDown()) {
+                setLocation(e.getXOnScreen() - this.startX, e.getYOnScreen() - this.startY);
             }
         }
 
@@ -68,7 +66,7 @@ public class Window extends JFrame {
 
         @Override
         public void mouseMoved(MouseEvent e) {
-            if (e.isAltDown()) {
+            if (e.isShiftDown()) {
                 int x = e.getX();
                 int y = e.getY();
                 int h = getHeight();
