@@ -170,36 +170,6 @@ public class Window extends JFrame {
         }
 
         @Override
-        public void mouseExited(MouseEvent e) {
-            if (e.isShiftDown()) {
-                switch (mouseSector) {
-                    case NW:
-                        setLocation(e.getXOnScreen(), e.getYOnScreen());
-                        break;
-                    case N:
-                        break;
-                    case NE:
-                        break;
-                    case E:
-                        break;
-                    case SE:
-                        break;
-                    case S:
-                        break;
-                    case SW:
-                        break;
-                    case W:
-                        break;
-                    case NONE:
-                    default:
-                        break;
-                }
-            } else {
-                mouseSector = Sector.NONE;
-            }
-        }
-
-        @Override
         public void mouseWheelMoved(MouseWheelEvent e) {
             if (e.isShiftDown()) {
                 setSize(getWidth() - (e.getWheelRotation() * SCROLL_FACTOR), getHeight() - (e.getWheelRotation() * SCROLL_FACTOR));
