@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class Window extends JFrame {
 
-    protected Window(Dimension size, Color colour) {
+    protected Window(Dimension size, Color colour, Boolean always) {
         super("Tinted Window");
 
         this.setUndecorated(true);
@@ -21,7 +21,8 @@ public class Window extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         this.setBackground(colour);
-        this.setVisible(true);
+        this.setAlwaysOnTop(always);
+        //this.setVisible(true);
 
         MouseAdapter drag = new Dragger();
         this.addMouseListener(drag);
