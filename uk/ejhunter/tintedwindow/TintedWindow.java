@@ -1,7 +1,7 @@
 /*
- * This file is part of Tinted Window ©, a program for creating coloured overlays on screen
+ * This file is part of Tinted Window, a program for creating coloured overlays on screen
  * 
- * Copyright (C) 2011 Euan James Hunter <euanhunter117@gmail.com>
+ * Copyright (C) 2014 Euan James Hunter <euanhunter117@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,11 @@
 
 package uk.ejhunter.tintedwindow;
 
+import java.awt.Dimension;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
 import com.sun.awt.AWTUtilities;
 
 public class TintedWindow {
@@ -51,7 +54,7 @@ public class TintedWindow {
 				
 				@Override
 				public void run() {
-					new Overlay();
+					new Overlay7(new Dimension(400, 400)).makeVisible();
 				}
 			});
 		} catch (Exception e1) {
@@ -66,7 +69,7 @@ public class TintedWindow {
 	private static void tests() {
 
 		//checks the Java 7 is not in use, cause Java 7 dose some weird stuff to this program
-		if(System.getProperty("java.version").contains("1.7")) {
+		/*if(System.getProperty("java.version").contains("1.7")) {
 			JOptionPane.showMessageDialog(null, "Sorry, this program does not work with Java 7", "ERROR", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
@@ -77,6 +80,6 @@ public class TintedWindow {
 			System.exit(1);
 		}
 
-		return;
+		return;*/
 	}
 }
