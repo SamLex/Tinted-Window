@@ -35,7 +35,7 @@ public class Overlay7 extends Overlay {
         this.setUndecorated(true);
         
         this.overlayDragger = new OverlayDragger(this);
-        this.addMouseListener(this);
+        this.addMouseListener(overlayDragger);
         this.addMouseMotionListener(overlayDragger);
         this.addMouseWheelListener(overlayDragger);
     }

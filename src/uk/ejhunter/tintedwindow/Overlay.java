@@ -70,8 +70,8 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
         getOptionsButton().addMouseListener(this);
         
         getPopupMenu().add(getAboutButton());
-        getPopupMenu().add(getExitButton());
         getPopupMenu().add(getOptionsButton());
+        getPopupMenu().add(getExitButton());
         
         this.about = new About();
         this.options = new Options();

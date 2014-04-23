@@ -50,18 +50,16 @@ public class OverlayDragger extends MouseAdapter {
 
     public OverlayDragger(Overlay overlay) {
         super();
-
-        this.startX = 0;
-        this.startY = 0;
-        this.dragX = 0;
-        this.dragY = 0;
-        this.mouseSector = Sector.NONE;
         this.overlay = overlay;
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
-        
+    public void mousePressed(MouseEvent e) {
+        this.startX = e.getX();
+        this.startY = e.getY();
+
+        this.dragX = e.getXOnScreen();
+        this.dragY = e.getYOnScreen();
     }
     
     @Override
