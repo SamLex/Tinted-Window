@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ejhunter.tintedwindow;
@@ -42,109 +42,110 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
     private About about;
     private Options options;
     private Disk disk;
-    
+
     public Overlay(Disk disk) {
         super("Tinted Window");
-        
+
         this.disk = disk;
         this.focus = false;
         this.opacity = 0f;
-        
+
         this.setSize(new Dimension(400, 400));
         this.addFocusListener(this);
-        this.addMouseListener(this);  
+        this.addMouseListener(this);
         this.setLocationByPlatform(true);
-        
+        if (TintedWindow.getOS() != TintedWindow.OS.OSX)
+            this.setAlwaysOnTop(true);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 exit();
             }
         });
-        
+
         this.popupMenu = new JPopupMenu("Options");
-        
+
         this.aboutButton = new JMenuItem("About");
         this.optionsButton = new JMenuItem("Options");
         this.exitButton = new JMenuItem("Exit");
-        
+
         getAboutButton().addMouseListener(this);
         getExitButton().addMouseListener(this);
         getOptionsButton().addMouseListener(this);
-        
+
         getPopupMenu().add(getAboutButton());
         getPopupMenu().add(getOptionsButton());
         getPopupMenu().add(getExitButton());
-        
+
         this.about = new About(this);
         this.options = new Options(disk, this);
     }
 
     public abstract void makeVisible();
-    
+
     public void makeInvisible() {
         this.setVisible(false);
     }
-    
+
     public void exit() {
         this.makeInvisible();
         this.dispose();
         getDisk().save();
         System.exit(0);
     }
-    
+
     @Override
     public void focusGained(FocusEvent e) {
         setFocus(true);
     }
-    
+
     @Override
     public void focusLost(FocusEvent e) {
         getPopupMenu().setVisible(false);
         getAboutButton().setForeground(Color.BLACK);
         getExitButton().setForeground(Color.BLACK);
         getOptionsButton().setForeground(Color.BLACK);
-        
+
         setFocus(false);
     }
-    
+
     @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getComponent().equals(getAboutButton())) {
+        if (e.getComponent().equals(getAboutButton())) {
             this.makeInvisible();
             getAbout().makeVisible();
-        }else if (e.getComponent().equals(getOptionsButton())){
+        } else if (e.getComponent().equals(getOptionsButton())) {
             this.makeInvisible();
             getOptions().makeVisible();
-        }else if (e.getComponent().equals(getExitButton())){
+        } else if (e.getComponent().equals(getExitButton())) {
             this.exit();
         }
 
-        if(isFocus()){
-            if(getPopupMenu().isVisible()){
+        if (isFocus()) {
+            if (getPopupMenu().isVisible()) {
                 getPopupMenu().setVisible(false);
             }
-            
-            if(e.getButton() == MouseEvent.BUTTON3){
+
+            if (e.getButton() == MouseEvent.BUTTON3) {
                 getPopupMenu().setLocation(e.getLocationOnScreen());
                 getPopupMenu().setVisible(true);
             }
         }
     }
-    
+
     @Override
     public void mouseEntered(MouseEvent e) {
-        if(e.getComponent().equals(getAboutButton()) || e.getComponent().equals(getOptionsButton()) || e.getComponent().equals(getExitButton())) {
+        if (e.getComponent().equals(getAboutButton()) || e.getComponent().equals(getOptionsButton()) || e.getComponent().equals(getExitButton())) {
             e.getComponent().setForeground(getDisk().getColour());
         }
     }
-    
+
     @Override
     public void mouseExited(MouseEvent e) {
-        if(e.getComponent().equals(getAboutButton()) || e.getComponent().equals(getOptionsButton()) || e.getComponent().equals(getExitButton())) {
+        if (e.getComponent().equals(getAboutButton()) || e.getComponent().equals(getOptionsButton()) || e.getComponent().equals(getExitButton())) {
             e.getComponent().setForeground(Color.BLACK);
         }
     }
-    
+
     public JPopupMenu getPopupMenu() {
         return popupMenu;
     }
