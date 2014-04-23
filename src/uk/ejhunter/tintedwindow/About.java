@@ -85,7 +85,7 @@ public class About extends Frame {
     private void loadError() {
         JOptionPane.showMessageDialog(this, "Sorry, there was an error loading this the About page", "ERROR", JOptionPane.ERROR_MESSAGE);
     }
-    
+
     private class AboutLinkHandler implements HyperlinkListener {
         @Override
         public void hyperlinkUpdate(HyperlinkEvent hle) {

@@ -7,14 +7,14 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ejhunter.tintedwindow;
@@ -29,101 +29,105 @@ import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
 public class Options extends Frame implements MouseListener {
-    
+
     private static final long serialVersionUID = -1968605702154541195L;
     private JButton advancedButton, startButton;
-	private JColorChooser jcc;
-	private JPanel jccPanel, buttonPanel;
-	private Disk disk;
-	private Overlay overlay;
-	private Advanced advanced;
-	
-	public Options(Disk disk, Overlay overlay) {
-	    super("Tinted Window - Options");
-	    
-	    this.disk = disk;
-		this.overlay = overlay;
-		
-		this.jcc = new JColorChooser(disk.getColour());
-		this.jccPanel = new JPanel();
-		this.buttonPanel = new JPanel();
+    private JColorChooser jcc;
+    private JPanel jccPanel, buttonPanel;
+    private Disk disk;
+    private Overlay overlay;
+    private Advanced advanced;
 
-		this.advancedButton = new JButton("Advanced");
-		this.startButton = new JButton("Start");
+    public Options(Disk disk, Overlay overlay) {
+        super("Tinted Window - Options");
 
-		this.setSize(450, 350);
-		this.setResizable(false);
-		this.setLayout(null);
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-			    startButton();
-			}
-		});
+        this.disk = disk;
+        this.overlay = overlay;
 
-		this.jcc.setPreviewPanel(new JPanel());
+        this.jcc = new JColorChooser(disk.getColour());
+        this.jccPanel = new JPanel();
+        this.buttonPanel = new JPanel();
 
-		this.jccPanel.setLocation(0, 15);
-		this.jccPanel.setSize(450, 350);
-		this.jccPanel.add(jcc);
+        this.advancedButton = new JButton("Advanced");
+        this.startButton = new JButton("Start");
 
-		this.advancedButton.setSize(90, 30);
-		this.advancedButton.setLocation(30, 10);
-		this.advancedButton.addMouseListener(this);
+        this.setSize(450, 350);
+        this.setResizable(false);
+        this.setLayout(null);
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                startButton();
+            }
+        });
 
-		this.startButton.setSize(70, 30);
-		this.startButton.setLocation(300, 10);
-		this.startButton.addMouseListener(this);
+        this.jcc.setPreviewPanel(new JPanel());
 
-		this.buttonPanel.setLocation(20, 300);
-		this.buttonPanel.setSize(450, 50);
-		this.buttonPanel.setLayout(null);
-		this.buttonPanel.add(advancedButton);
-		this.buttonPanel.add(startButton);
+        this.jccPanel.setLocation(0, 15);
+        this.jccPanel.setSize(450, 350);
+        this.jccPanel.add(jcc);
 
-		this.add(buttonPanel);
-		this.add(jccPanel);
-		
-		this.advanced = new Advanced(this, disk);
-	}
+        this.advancedButton.setSize(90, 30);
+        this.advancedButton.setLocation(30, 10);
+        this.advancedButton.addMouseListener(this);
 
-	public void advancedUpdate() {
-	    jcc.setColor(disk.getColour());
-	}
-	
-	private void startButton() {
-	    this.makeInvisible();
-	    disk.setColour(jcc.getColor());
-	    overlay.makeVisible();
-	}
-	
-	public void makeVisible() {
-		this.setLocationByPlatform(true);
-		this.setVisible(true);
-	}
+        this.startButton.setSize(70, 30);
+        this.startButton.setLocation(300, 10);
+        this.startButton.addMouseListener(this);
 
-	public void makeInvisible() {
-		this.setVisible(false);
-		advanced.makeInvisible();
-	}
+        this.buttonPanel.setLocation(20, 300);
+        this.buttonPanel.setSize(450, 50);
+        this.buttonPanel.setLayout(null);
+        this.buttonPanel.add(advancedButton);
+        this.buttonPanel.add(startButton);
 
-	@Override
-	public void mouseClicked(MouseEvent e) {}
+        this.add(buttonPanel);
+        this.add(jccPanel);
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		if(e.getComponent().equals(this.advancedButton)){
-		    advanced.makeVisible();
-		}else if(e.getComponent().equals(startButton)){
-		    startButton();
-		}
-	}
+        this.advanced = new Advanced(this, disk);
+    }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {}
+    public void advancedUpdate() {
+        jcc.setColor(disk.getColour());
+    }
 
-	@Override
-	public void mouseEntered(MouseEvent e) {}
+    private void startButton() {
+        this.makeInvisible();
+        disk.setColour(jcc.getColor());
+        overlay.makeVisible();
+    }
 
-	@Override
-	public void mouseExited(MouseEvent e) {}
+    public void makeVisible() {
+        this.setLocationByPlatform(true);
+        this.setVisible(true);
+    }
+
+    public void makeInvisible() {
+        this.setVisible(false);
+        advanced.makeInvisible();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (e.getComponent().equals(this.advancedButton)) {
+            advanced.makeVisible();
+        } else if (e.getComponent().equals(startButton)) {
+            startButton();
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
 }

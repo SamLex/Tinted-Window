@@ -38,13 +38,13 @@ public class Advanced extends Frame implements MouseListener {
     private JLabel colourLabel, opacityLabel;
     private Disk disk;
     private Options options;
-    
+
     public Advanced(Options options, Disk disk) {
         super("Tinted Window - Advanced Options");
 
         this.disk = disk;
         this.options = options;
-        
+
         this.setSize(400, 190);
         this.setResizable(false);
         this.setLocationByPlatform(true);

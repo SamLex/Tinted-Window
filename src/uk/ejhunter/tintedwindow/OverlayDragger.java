@@ -61,7 +61,7 @@ public class OverlayDragger extends MouseAdapter {
         this.dragX = e.getXOnScreen();
         this.dragY = e.getYOnScreen();
     }
-    
+
     @Override
     public void mouseDragged(MouseEvent e) {
         if (e.getComponent() instanceof Overlay) {
