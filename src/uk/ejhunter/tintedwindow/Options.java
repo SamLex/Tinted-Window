@@ -51,7 +51,7 @@ public class Options extends Frame implements MouseListener {
         this.advancedButton = new JButton("Advanced");
         this.startButton = new JButton("Start");
 
-        this.setSize(450, 350);
+        this.setSize(700, 350);
         this.setResizable(false);
         this.setLayout(null);
         this.addWindowListener(new WindowAdapter() {
@@ -63,19 +63,19 @@ public class Options extends Frame implements MouseListener {
         this.jcc.setPreviewPanel(new JPanel());
 
         this.jccPanel.setLocation(0, 15);
-        this.jccPanel.setSize(450, 350);
+        this.jccPanel.setSize(700, 350);
         this.jccPanel.add(jcc);
 
         this.advancedButton.setSize(90, 30);
-        this.advancedButton.setLocation(30, 10);
+        this.advancedButton.setLocation(210, 10);
         this.advancedButton.addMouseListener(this);
 
         this.startButton.setSize(70, 30);
-        this.startButton.setLocation(300, 10);
+        this.startButton.setLocation(390, 10);
         this.startButton.addMouseListener(this);
 
         this.buttonPanel.setLocation(20, 300);
-        this.buttonPanel.setSize(450, 50);
+        this.buttonPanel.setSize(680, 50);
         this.buttonPanel.setLayout(null);
         this.buttonPanel.add(advancedButton);
         this.buttonPanel.add(startButton);
