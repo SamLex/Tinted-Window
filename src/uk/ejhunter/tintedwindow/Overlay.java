@@ -34,21 +34,23 @@ import javax.swing.JPopupMenu;
 
 public abstract class Overlay extends Frame implements MouseListener, FocusListener {
 
-    private static final long serialVersionUID = -1198140418579551621L;
+    private static final long serialVersionUID = 5873378487992946641L;
     private JPopupMenu popupMenu;
     private JMenuItem aboutButton, optionsButton, exitButton;
     private boolean focus;
     private float opacity;
     private About about;
     private Options options;
+    private Disk disk;
     
-    public Overlay(Dimension size) {
+    public Overlay(Disk disk) {
         super("Tinted Window");
         
+        this.disk = disk;
         this.focus = false;
         this.opacity = 0f;
         
-        this.setSize(size);
+        this.setSize(new Dimension(400, 400));
         this.addFocusListener(this);
         this.addMouseListener(this);  
         this.setLocationByPlatform(true);
@@ -73,8 +75,8 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
         getPopupMenu().add(getOptionsButton());
         getPopupMenu().add(getExitButton());
         
-        this.about = new About();
-        this.options = new Options();
+        this.about = new About(this);
+        this.options = new Options(disk, this);
     }
 
     public abstract void makeVisible();
@@ -86,6 +88,7 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
     public void exit() {
         this.makeInvisible();
         this.dispose();
+        getDisk().save();
         System.exit(0);
     }
     
@@ -108,10 +111,10 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
     public void mousePressed(MouseEvent e) {
         if(e.getComponent().equals(getAboutButton())) {
             this.makeInvisible();
-            getAbout().show();
+            getAbout().makeVisible();
         }else if (e.getComponent().equals(getOptionsButton())){
             this.makeInvisible();
-            getOptions().show();
+            getOptions().makeVisible();
         }else if (e.getComponent().equals(getExitButton())){
             this.exit();
         }
@@ -131,7 +134,7 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
     @Override
     public void mouseEntered(MouseEvent e) {
         if(e.getComponent().equals(getAboutButton()) || e.getComponent().equals(getOptionsButton()) || e.getComponent().equals(getExitButton())) {
-            e.getComponent().setForeground(Disk.getColour());
+            e.getComponent().setForeground(getDisk().getColour());
         }
     }
     
@@ -180,6 +183,10 @@ public abstract class Overlay extends Frame implements MouseListener, FocusListe
 
     public Options getOptions() {
         return options;
+    }
+
+    public Disk getDisk() {
+        return disk;
     }
 
 }

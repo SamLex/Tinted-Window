@@ -7,19 +7,17 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ejhunter.tintedwindow;
-
-import java.awt.Dimension;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -28,58 +26,66 @@ import com.sun.awt.AWTUtilities;
 
 public class TintedWindow {
 
-	public static void main(String[] args) {
+    private static OS os;
+    private static int javaVersion;
 
-		//initialises program
-		init();
-	}
+    public enum OS {
+        WINDOWS,
+        OSX,
+        LINUX,
+        UNKNOWN
+    };
 
-	private static void init() {
+    public static void main(String[] args) {
+        init();
+    }
 
-		//test to check the computer is suitable for program
-		tests();
-		
-		//gets previous data from disk, also provides methods to write data
-		try {
-			new Disk();
-		} catch(Exception e) { //catches any error that happen
-			JOptionPane.showMessageDialog(null, "An error has occured while reading/writing from/to the disk", 
-					"ERROR", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-		}
+    private static void init() {
+        if (testCompatibility()) {
+            final Disk disk = new Disk();
 
-		//starts overlay in AWT-dispatch thread
-		try {
-			SwingUtilities.invokeLater(new Runnable() {
-				
-				@Override
-				public void run() {
-					new Overlay7(new Dimension(400, 400)).makeVisible();
-				}
-			});
-		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(null, "Fatal Error! Please restart the program", 
-					"ERROR", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-		}
-		
-		return;
-	}
+            SwingUtilities.invokeLater(new Runnable() {
 
-	private static void tests() {
+                @Override
+                public void run() {
+                    Overlay overlay;
+                    if (javaVersion == 7)
+                        overlay = new Overlay7(disk);
+                    else
+                        overlay = new Overlay6(disk);
+                    overlay.makeVisible();
+                }
+            });
+        }
+    }
 
-		//checks the Java 7 is not in use, cause Java 7 dose some weird stuff to this program
-		/*if(System.getProperty("java.version").contains("1.7")) {
-			JOptionPane.showMessageDialog(null, "Sorry, this program does not work with Java 7", "ERROR", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-		}
+    private static boolean testCompatibility() {
+        if (System.getProperty("java.version").contains("1.7")) {
+            javaVersion = 7;
+        } else {
+            javaVersion = 6;
+        }
 
-		//checks that the system supports the translucency feature
-		if(!AWTUtilities.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
-			JOptionPane.showMessageDialog(null, "Sorry, your system does not support this program, please update your Java version and try again", "ERROR", JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-		}
+        if (!AWTUtilities.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
+            JOptionPane.showMessageDialog(null, "Sorry, your system does not support this program, please update your Java version and try again", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
-		return;*/
-	}
+        String osString = System.getProperty("os.name").toLowerCase();
+
+        if (osString.contains("windows"))
+            os = OS.WINDOWS;
+        else if (osString.contains("os x"))
+            os = OS.OSX;
+        else if (osString.contains("linux"))
+            os = OS.LINUX;
+        else
+            os = OS.UNKNOWN;
+
+        return true;
+    }
+
+    public static OS getOS() {
+        return os;
+    }
 }

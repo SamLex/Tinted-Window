@@ -19,18 +19,16 @@
 
 package uk.ejhunter.tintedwindow;
 
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Overlay7 extends Overlay {
 
-    private static final long serialVersionUID = 1141993882021826404L;
-
+    private static final long serialVersionUID = 7003031752022343735L;
     private MouseAdapter overlayDragger;
     
-    public Overlay7(Dimension size) {
-        super(size);
+    public Overlay7(Disk disk) {
+        super(disk);
         
         this.setUndecorated(true);
         
@@ -42,8 +40,8 @@ public class Overlay7 extends Overlay {
 
     @Override
     public void makeVisible() {
-        this.setBackground(Disk.getColour());
-        this.setOpacityValue((float) Disk.getPercent() / 100);
+        this.setBackground(getDisk().getColour());
+        this.setOpacityValue((float) getDisk().getOpacityPercent() / 100);
         this.setOpacity(getOpacity());
         this.setVisible(true);
     }

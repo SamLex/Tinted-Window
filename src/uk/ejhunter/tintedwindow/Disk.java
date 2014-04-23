@@ -1,20 +1,20 @@
 /*
- * This file is part of Tinted Window ©, a program for creating coloured overlays on screen
+ * This file is part of Tinted Window, a program for creating coloured overlays on screen
  * 
- * Copyright (C) 2011 Euan James Hunter <euanhunter117@gmail.com>
+ * Copyright (C) 2014 Euan James Hunter <euanhunter117@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package uk.ejhunter.tintedwindow;
@@ -29,127 +29,117 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import uk.ejhunter.tintedwindow.TintedWindow.OS;
+
 public class Disk {
 
-	private static Color colour;
-	private static byte percent;
-	private static File dir, file;
-	private static DataOutputStream dos;
-	private static DataInputStream dis;
+    private Color colour;
+    private byte opacityPercent;
+    private File dataDirectory, dataFile;
+    private OS os;
 
-	protected Disk() throws IOException {
+    public Disk() {
+        this.colour = null;
+        this.opacityPercent = 0;
 
-		//does disk operations
-		start();
-	}
+        this.os = TintedWindow.getOS();
 
-	//tests to work out where to put file
-	private static void start() throws IOException {
+        if (os == OS.LINUX || os == OS.OSX || os == OS.UNKNOWN)
+            this.dataFile = new File(System.getProperty("user.home"), ".tintedwindow");
+        else {
+            this.dataDirectory = new File(System.getenv("APPDATA"), "Tinted Window");
 
-		//get APPDATA variable, which is null on non-windows systems
-		String s = System.getenv("APPDATA");
+            if (!this.dataDirectory.exists())
+                this.dataDirectory.mkdir();
 
-		if(s == null) {
-			//creates .tintedwindow for UNIX-like systems
-			file = new File(System.getProperty("user.home"), ".tintedwindow");
-		}else
-			if(s != null) {
-				//creates directory in APPDATA and then creates Tinted Window.dat
-				dir = new File(s, "Tinted Window");
+            this.dataFile = new File(dataDirectory, "Tinted Window.dat");
+        }
 
-				if(!dir.exists()){
-					dir.mkdir();
-				}
-				
-				file = new File(dir, "Tinted Window.dat");
+        if (!dataFile.exists())
+            try {
+                dataFile.createNewFile();
+                writeDefaults();
+                assignDefaults();
+            } catch (IOException io) {
+                io.printStackTrace();
+            }
+    }
 
-				dir = null;
-			}
+    private void writeDefaults() throws IOException {
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)));
 
-		//creates file if it does not exist and writes defaults to file
-		if(!file.exists()) {
-			file.createNewFile();
-			startWrite();
-		}
+        // purple
+        dos.writeShort(160); // r
+        dos.writeShort(35); // g
+        dos.writeShort(240); // b
+        // percent
+        dos.writeByte(50);
 
-		//reads data
-		startRead();
+        dos.flush();
+        dos.close();
+    }
 
-		return;
-	}
+    private void readFromDisk() {
+        try {
+            DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(dataFile)));
 
-	//writer for first time run
-	private static void startWrite() throws IOException {
+            int r, g, b;
+            r = dis.readShort();
+            g = dis.readShort();
+            b = dis.readShort();
+            this.colour = new Color(r, g, b);
+            this.opacityPercent = dis.readByte();
 
-		dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
+            dis.close();
 
-		//writes the values for purple and the percentage to the file
-		//purple
-		dos.writeShort(160); //r
-		dos.writeShort(35); //g
-		dos.writeShort(240); //b
-		//percent
-		dos.writeByte(50);
+        } catch (IOException io) {
+            io.printStackTrace();
+            assignDefaults();
+        }
+    }
 
-		//flush,close,nullify
-		dos.flush();
-		dos.close();
+    private void assignDefaults() {
+        this.colour = new Color(160, 35, 240);
+        this.opacityPercent = 50;
+    }
 
-		dos = null;
+    public void save() {
+        try {
+            DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)));
 
-		return;
-	}
+            int r, g, b;
+            r = this.getColour().getRed();
+            g = this.getColour().getGreen();
+            b = this.getColour().getBlue();
+            dos.writeShort(r);
+            dos.writeShort(g);
+            dos.writeShort(b);
+            dos.writeByte(this.getOpacityPercent());
 
-	//reader for start of program
-	private static void startRead() throws IOException {
+            dos.flush();
+            dos.close();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+    }
 
-		dis = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+    public byte getOpacityPercent() {
+        if (opacityPercent == 0)
+            readFromDisk();
+        return opacityPercent;
+    }
 
-		//reads colour and percent data
-		colour = new Color(dis.readShort(), dis.readShort(), dis.readShort());
-		percent = dis.readByte();
+    public Color getColour() {
+        if (colour == null)
+            readFromDisk();
+        return colour;
+    }
 
-		//close,nullify
-		dis.close();
+    public void setColour(Color colour) {
+        this.colour = colour;
+    }
 
-		dis = null;
-
-		return;
-	}
-
-	//writer to be used externally
-	protected static void write(Color c, byte p) throws Exception {
-
-		//clears file for new writing
-		file.delete();
-		file.createNewFile();
-
-		dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-
-		//writes data
-		dos.writeShort(c.getRed()); //r
-		dos.writeShort(c.getGreen()); //g
-		dos.writeShort(c.getBlue()); //b
-		dos.writeByte(p); //percent
-
-		//flush,close,nullify
-		dos.flush();
-		dos.close();
-
-		dos = null;
-
-		percent = p;
-		colour = c;
-
-		return;
-	}
-
-	//getters for values taken from disk
-	protected static Color getColour() {
-		return colour;
-	}
-
-	protected static byte getPercent() {
-		return percent;
-	}
+    public void setOpacityPercent(byte opacityPercent) {
+        this.opacityPercent = opacityPercent;
+    }
 }

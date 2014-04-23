@@ -19,23 +19,22 @@
 
 package uk.ejhunter.tintedwindow;
 
-import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 
 import com.sun.awt.AWTUtilities;
 
 public class Overlay6 extends Overlay {
 	
-    private static final long serialVersionUID = -7155305134093250363L;
+    private static final long serialVersionUID = -4098419824066389063L;
 
-    public Overlay6(Dimension size) {
-	    super(size);
+    public Overlay6(Disk disk) {
+	    super(disk);
 	}
 
     @Override
 	public void makeVisible() {
-		this.setBackground(Disk.getColour());
-		this.setOpacityValue((float) Disk.getPercent() / 100);
+		this.setBackground(getDisk().getColour());
+		this.setOpacityValue((float) getDisk().getOpacityPercent() / 100);
 		AWTUtilities.setWindowOpacity(this, getOpacity());
 		this.setVisible(true);
 	}
