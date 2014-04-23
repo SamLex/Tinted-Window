@@ -97,6 +97,7 @@ public class Options extends Frame implements MouseListener {
     }
 
     public void makeVisible() {
+        jcc.setColor(disk.getColour());
         this.setLocationByPlatform(true);
         this.setVisible(true);
     }
@@ -113,6 +114,7 @@ public class Options extends Frame implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         if (e.getComponent().equals(this.advancedButton)) {
+            disk.setColour(jcc.getColor());
             advanced.makeVisible();
         } else if (e.getComponent().equals(startButton)) {
             startButton();
