@@ -66,22 +66,22 @@ public class Disk {
     }
 
     private void writeDefaults() throws IOException {
-        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)));
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)))) {
 
-        // purple
-        dos.writeShort(160); // r
-        dos.writeShort(35); // g
-        dos.writeShort(240); // b
-        // percent
-        dos.writeByte(50);
+            // purple
+            dos.writeShort(160); // r
+            dos.writeShort(35); // g
+            dos.writeShort(240); // b
+            // percent
+            dos.writeByte(50);
 
-        dos.flush();
-        dos.close();
+            dos.flush();
+            dos.close();
+        }
     }
 
     private void readFromDisk() {
-        try {
-            DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(dataFile)));
+        try (DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(dataFile)))) {
 
             int r, g, b;
             r = dis.readShort();
@@ -104,8 +104,7 @@ public class Disk {
     }
 
     public void save() {
-        try {
-            DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)));
+        try (DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(dataFile)))) {
 
             int r, g, b;
             r = this.getColour().getRed();
