@@ -19,6 +19,10 @@
 
 package uk.ejhunter.tintedwindow;
 
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.GraphicsDevice.WindowTranslucency;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -28,6 +32,7 @@ public class TintedWindow {
 
     private static OS os;
     private static int javaVersion;
+    private static boolean perpixel;
 
     public enum OS {
         WINDOWS,
@@ -62,13 +67,23 @@ public class TintedWindow {
     private static boolean testCompatibility() {
         if (System.getProperty("java.version").contains("1.7")) {
             javaVersion = 7;
+
+            GraphicsDevice dev = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            if (dev.isWindowTranslucencySupported(WindowTranslucency.PERPIXEL_TRANSLUCENT)) {
+                perpixel = true;
+            } else if (dev.isWindowTranslucencySupported(WindowTranslucency.TRANSLUCENT)) {
+                perpixel = false;
+            } else {
+                JOptionPane.showMessageDialog(null, "Sorry, your system does not support this program, please update your Java version and try again", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         } else {
             javaVersion = 6;
-        }
 
-        if (!AWTUtilities.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
-            JOptionPane.showMessageDialog(null, "Sorry, your system does not support this program, please update your Java version and try again", "ERROR", JOptionPane.ERROR_MESSAGE);
-            return false;
+            if (!AWTUtilities.isTranslucencySupported(AWTUtilities.Translucency.TRANSLUCENT)) {
+                JOptionPane.showMessageDialog(null, "Sorry, your system does not support this program, please update your Java version and try again", "ERROR", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
 
         String osString = System.getProperty("os.name").toLowerCase();
@@ -87,5 +102,9 @@ public class TintedWindow {
 
     public static OS getOS() {
         return os;
+    }
+
+    public static boolean getPerpixel() {
+        return perpixel;
     }
 }

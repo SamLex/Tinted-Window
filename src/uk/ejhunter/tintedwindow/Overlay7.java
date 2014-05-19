@@ -19,6 +19,7 @@
 
 package uk.ejhunter.tintedwindow;
 
+import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -40,9 +41,16 @@ public class Overlay7 extends Overlay {
 
     @Override
     public void makeVisible() {
-        this.setBackground(getDisk().getColour());
+        Color background = getDisk().getColour();
         this.setOpacityValue((float) getDisk().getOpacityPercent() / 100);
-        this.setOpacity(getOpacity());
+
+        if (TintedWindow.getPerpixel()) {
+            this.setBackground(new Color((float) background.getRed() / 255f, (float) background.getGreen() / 255f, (float) background.getBlue() / 255f, getOpacity()));
+        } else {
+            this.setBackground(getDisk().getColour());
+            this.setOpacity(getOpacity());
+        }
+
         this.setVisible(true);
     }
 
